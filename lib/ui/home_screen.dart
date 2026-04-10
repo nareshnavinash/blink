@@ -37,13 +37,20 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // Timer card
-            _TimerCard(
-              timerAsync: timerAsync,
-              appStatus: appStatus,
-              settings: settings,
-              ref: ref,
+            _TimerCard(timerAsync: timerAsync, appStatus: appStatus, ref: ref),
+            const SizedBox(height: 16),
+
+            // Snooze bar (shown during preBreak)
+            timerAsync.when(
+              data: (status) {
+                if (status.state == TimerState.preBreak) {
+                  return _SnoozeBar(status: status, ref: ref);
+                }
+                return const SizedBox.shrink();
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (e, st) => const SizedBox.shrink(),
             ),
-            const SizedBox(height: 24),
 
             // Break info
             timerAsync.when(
@@ -124,15 +131,24 @@ class _StatusChip extends StatelessWidget {
 class _TimerCard extends StatelessWidget {
   final AsyncValue<TimerStatus> timerAsync;
   final AppStatus appStatus;
-  final dynamic settings;
   final WidgetRef ref;
 
   const _TimerCard({
     required this.timerAsync,
     required this.appStatus,
-    required this.settings,
     required this.ref,
   });
+
+  Color _progressColor(TimerStatus status) {
+    switch (status.state) {
+      case TimerState.onBreak:
+        return Colors.green;
+      case TimerState.preBreak:
+        return Colors.orange;
+      default:
+        return Colors.blue;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,9 +160,7 @@ class _TimerCard extends StatelessWidget {
           children: [
             timerAsync.when(
               data: (status) => _TimerDisplay(status: status),
-              loading: () => _TimerDisplayPlaceholder(
-                workMinutes: settings.workMinutes,
-              ),
+              loading: () => const _TimerDisplayLoading(),
               error: (e, st) => const Text('Timer error'),
             ),
             const SizedBox(height: 16),
@@ -159,9 +173,7 @@ class _TimerCard extends StatelessWidget {
                   value: status.progress,
                   minHeight: 6,
                   backgroundColor: Colors.grey.shade200,
-                  color: status.state == TimerState.onBreak
-                      ? Colors.green
-                      : Colors.blue,
+                  color: _progressColor(status),
                 ),
               ),
               loading: () => const LinearProgressIndicator(value: 0),
@@ -170,49 +182,155 @@ class _TimerCard extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Action buttons
-            Row(
-              children: [
-                FilledButton.icon(
-                  onPressed: () {
-                    ref.read(appStatusProvider.notifier).toggle();
-                  },
-                  icon: Icon(
-                    appStatus == AppStatus.running
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                  ),
-                  label: Text(
-                    appStatus == AppStatus.running ? 'Pause' : 'Resume',
-                  ),
-                ),
-                const SizedBox(width: 12),
-                timerAsync.when(
-                  data: (status) {
-                    if (status.state == TimerState.onBreak) {
-                      return OutlinedButton.icon(
-                        onPressed: () {
-                          ref.read(timerServiceProvider).skipBreak();
-                        },
-                        icon: const Icon(Icons.skip_next),
-                        label: const Text('Skip Break'),
-                      );
-                    }
-                    return OutlinedButton.icon(
-                      onPressed: () {
-                        ref.read(timerServiceProvider).startBreakNow();
-                      },
-                      icon: const Icon(Icons.free_breakfast),
-                      label: const Text('Start Break Now'),
-                    );
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (e, st) => const SizedBox.shrink(),
-                ),
-              ],
-            ),
+            _ActionButtons(timerAsync: timerAsync, appStatus: appStatus, ref: ref),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ActionButtons extends StatelessWidget {
+  final AsyncValue<TimerStatus> timerAsync;
+  final AppStatus appStatus;
+  final WidgetRef ref;
+
+  const _ActionButtons({
+    required this.timerAsync,
+    required this.appStatus,
+    required this.ref,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        FilledButton.icon(
+          onPressed: () {
+            ref.read(appStatusProvider.notifier).toggle();
+          },
+          icon: Icon(
+            appStatus == AppStatus.running ? Icons.pause : Icons.play_arrow,
+          ),
+          label: Text(
+            appStatus == AppStatus.running ? 'Pause' : 'Resume',
+          ),
+        ),
+        const SizedBox(width: 12),
+        timerAsync.when(
+          data: (status) {
+            if (status.state == TimerState.onBreak) {
+              return OutlinedButton.icon(
+                onPressed: () {
+                  ref.read(timerServiceProvider).skipBreak();
+                },
+                icon: const Icon(Icons.skip_next),
+                label: const Text('Skip Break'),
+              );
+            }
+            if (status.state == TimerState.preBreak) {
+              return OutlinedButton.icon(
+                onPressed: () {
+                  ref.read(timerServiceProvider).startBreakNow();
+                },
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Start Now'),
+              );
+            }
+            return OutlinedButton.icon(
+              onPressed: () {
+                ref.read(timerServiceProvider).startBreakNow();
+              },
+              icon: const Icon(Icons.free_breakfast),
+              label: const Text('Start Break Now'),
+            );
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (e, st) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+}
+
+class _SnoozeBar extends StatelessWidget {
+  final TimerStatus status;
+  final WidgetRef ref;
+
+  const _SnoozeBar({required this.status, required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.orange.shade50,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.snooze, size: 18, color: Colors.orange.shade700),
+                const SizedBox(width: 8),
+                Text(
+                  status.canPostpone
+                      ? 'Postpone? (${status.postponesRemaining} left today)'
+                      : 'No postpones remaining',
+                  style: TextStyle(
+                    color: Colors.orange.shade700,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            if (status.canPostpone) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  _SnoozeButton(
+                    label: '+1 min',
+                    onPressed: () =>
+                        ref.read(timerServiceProvider).postpone(1),
+                  ),
+                  const SizedBox(width: 8),
+                  _SnoozeButton(
+                    label: '+5 min',
+                    onPressed: () =>
+                        ref.read(timerServiceProvider).postpone(5),
+                  ),
+                  const SizedBox(width: 8),
+                  _SnoozeButton(
+                    label: '+15 min',
+                    onPressed: () =>
+                        ref.read(timerServiceProvider).postpone(15),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SnoozeButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+
+  const _SnoozeButton({required this.label, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Colors.orange.shade700,
+        side: BorderSide(color: Colors.orange.shade300),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        minimumSize: Size.zero,
+      ),
+      child: Text(label),
     );
   }
 }
@@ -222,6 +340,17 @@ class _TimerDisplay extends StatelessWidget {
 
   const _TimerDisplay({required this.status});
 
+  Color? _textColor() {
+    switch (status.state) {
+      case TimerState.onBreak:
+        return Colors.green[700];
+      case TimerState.preBreak:
+        return Colors.orange[700];
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -230,9 +359,7 @@ class _TimerDisplay extends StatelessWidget {
         Text(
           status.stateLabel,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: status.state == TimerState.onBreak
-                ? Colors.green[700]
-                : Colors.grey[600],
+            color: _textColor() ?? Colors.grey[600],
           ),
         ),
         const SizedBox(height: 8),
@@ -241,9 +368,7 @@ class _TimerDisplay extends StatelessWidget {
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
             fontWeight: FontWeight.w300,
             fontFeatures: [const FontFeature.tabularFigures()],
-            color: status.state == TimerState.onBreak
-                ? Colors.green[700]
-                : null,
+            color: _textColor(),
           ),
         ),
       ],
@@ -251,10 +376,8 @@ class _TimerDisplay extends StatelessWidget {
   }
 }
 
-class _TimerDisplayPlaceholder extends StatelessWidget {
-  final int workMinutes;
-
-  const _TimerDisplayPlaceholder({required this.workMinutes});
+class _TimerDisplayLoading extends StatelessWidget {
+  const _TimerDisplayLoading();
 
   @override
   Widget build(BuildContext context) {
@@ -262,17 +385,16 @@ class _TimerDisplayPlaceholder extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Next break in',
+          'Starting...',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
             color: Colors.grey[600],
           ),
         ),
         const SizedBox(height: 8),
         Text(
-          '${workMinutes.toString().padLeft(2, '0')}:00',
+          '--:--',
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
             fontWeight: FontWeight.w300,
-            fontFeatures: [const FontFeature.tabularFigures()],
           ),
         ),
       ],
@@ -289,11 +411,7 @@ class _BreakInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          Icons.info_outline,
-          size: 16,
-          color: Colors.grey[500],
-        ),
+        Icon(Icons.info_outline, size: 16, color: Colors.grey[500]),
         const SizedBox(width: 8),
         Text(
           'Break ${status.breaksTakenInCycle + 1} of cycle  |  '

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-enum TimerState { working, onBreak, paused, idle }
+enum TimerState { working, preBreak, onBreak, paused, idle }
 
 enum BreakType { short, long }
 
@@ -10,6 +10,8 @@ class TimerStatus {
   final int totalSeconds;
   final BreakType nextBreakType;
   final int breaksTakenInCycle;
+  final int postponesUsedToday;
+  final int maxPostponesPerDay;
 
   const TimerStatus({
     required this.state,
@@ -17,7 +19,12 @@ class TimerStatus {
     required this.totalSeconds,
     required this.nextBreakType,
     required this.breaksTakenInCycle,
+    this.postponesUsedToday = 0,
+    this.maxPostponesPerDay = 5,
   });
+
+  bool get canPostpone => postponesUsedToday < maxPostponesPerDay;
+  int get postponesRemaining => maxPostponesPerDay - postponesUsedToday;
 
   double get progress =>
       totalSeconds > 0 ? 1.0 - (remainingSeconds / totalSeconds) : 0.0;
@@ -32,31 +39,15 @@ class TimerStatus {
     switch (state) {
       case TimerState.working:
         return 'Next break in';
+      case TimerState.preBreak:
+        return 'Break starting in';
       case TimerState.onBreak:
-        return nextBreakType == BreakType.long
-            ? 'Long break'
-            : 'Short break';
+        return nextBreakType == BreakType.long ? 'Long break' : 'Short break';
       case TimerState.paused:
         return 'Paused';
       case TimerState.idle:
         return 'Idle';
     }
-  }
-
-  TimerStatus copyWith({
-    TimerState? state,
-    int? remainingSeconds,
-    int? totalSeconds,
-    BreakType? nextBreakType,
-    int? breaksTakenInCycle,
-  }) {
-    return TimerStatus(
-      state: state ?? this.state,
-      remainingSeconds: remainingSeconds ?? this.remainingSeconds,
-      totalSeconds: totalSeconds ?? this.totalSeconds,
-      nextBreakType: nextBreakType ?? this.nextBreakType,
-      breaksTakenInCycle: breaksTakenInCycle ?? this.breaksTakenInCycle,
-    );
   }
 }
 
@@ -69,15 +60,22 @@ class TimerService {
   late int _shortBreakDurationSeconds;
   late int _longBreakDurationSeconds;
   late int _longBreakInterval;
+  int _preBreakSeconds = 30;
+  int _maxPostponesPerDay = 5;
 
   int _remainingSeconds = 0;
   int _totalSeconds = 0;
   int _breaksTakenInCycle = 0;
+  int _postponesUsedToday = 0;
   TimerState _state = TimerState.idle;
   BreakType _currentBreakType = BreakType.short;
 
-  // Saved state for pause/resume
   TimerState? _stateBeforePause;
+
+  // Callbacks for notifications
+  void Function()? onPreBreakStart;
+  void Function(BreakType type)? onBreakStart;
+  void Function()? onBreakEnd;
 
   Stream<TimerStatus> get statusStream => _statusController.stream;
 
@@ -87,6 +85,8 @@ class TimerService {
     totalSeconds: _totalSeconds,
     nextBreakType: _currentBreakType,
     breaksTakenInCycle: _breaksTakenInCycle,
+    postponesUsedToday: _postponesUsedToday,
+    maxPostponesPerDay: _maxPostponesPerDay,
   );
 
   void configure({
@@ -94,11 +94,15 @@ class TimerService {
     required int breakSeconds,
     required int longBreakMinutes,
     required int longBreakInterval,
+    int preBreakSeconds = 30,
+    int maxPostponesPerDay = 5,
   }) {
     _workDurationSeconds = workMinutes * 60;
     _shortBreakDurationSeconds = breakSeconds;
     _longBreakDurationSeconds = longBreakMinutes * 60;
     _longBreakInterval = longBreakInterval;
+    _preBreakSeconds = preBreakSeconds;
+    _maxPostponesPerDay = maxPostponesPerDay;
   }
 
   void startWorkSession() {
@@ -107,6 +111,16 @@ class TimerService {
     _remainingSeconds = _workDurationSeconds;
     _state = TimerState.working;
     _updateNextBreakType();
+    _emitStatus();
+    _startTicking();
+  }
+
+  void _startPreBreak() {
+    _timer?.cancel();
+    _state = TimerState.preBreak;
+    _totalSeconds = _preBreakSeconds;
+    _remainingSeconds = _preBreakSeconds;
+    onPreBreakStart?.call();
     _emitStatus();
     _startTicking();
   }
@@ -123,6 +137,18 @@ class TimerService {
       _remainingSeconds = _shortBreakDurationSeconds;
     }
 
+    onBreakStart?.call(_currentBreakType);
+    _emitStatus();
+    _startTicking();
+  }
+
+  void postpone(int minutes) {
+    if (!currentStatus.canPostpone) return;
+    _postponesUsedToday++;
+    _timer?.cancel();
+    _state = TimerState.working;
+    _totalSeconds = minutes * 60;
+    _remainingSeconds = minutes * 60;
     _emitStatus();
     _startTicking();
   }
@@ -153,6 +179,10 @@ class TimerService {
     startBreak();
   }
 
+  void resetDailyPostpones() {
+    _postponesUsedToday = 0;
+  }
+
   void _startTicking() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -167,10 +197,16 @@ class TimerService {
   }
 
   void _onTimerComplete() {
-    if (_state == TimerState.working) {
-      startBreak();
-    } else if (_state == TimerState.onBreak) {
-      _onBreakComplete();
+    switch (_state) {
+      case TimerState.working:
+        _startPreBreak();
+      case TimerState.preBreak:
+        startBreak();
+      case TimerState.onBreak:
+        _onBreakComplete();
+      case TimerState.paused:
+      case TimerState.idle:
+        break;
     }
   }
 
@@ -179,6 +215,7 @@ class TimerService {
     if (_breaksTakenInCycle >= _longBreakInterval) {
       _breaksTakenInCycle = 0;
     }
+    onBreakEnd?.call();
     startWorkSession();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:blink/core/providers.dart';
+import 'package:blink/services/notification_service.dart';
 import 'package:blink/services/storage_service.dart';
 import 'package:blink/services/timer_service.dart';
 import 'package:blink/services/tray_service.dart';
@@ -9,6 +10,7 @@ import 'package:blink/ui/home_screen.dart';
 
 late final TrayService trayService;
 late final TimerService timerService;
+late final NotificationService notificationService;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +42,10 @@ Future<void> main() async {
 
   await windowManager.setPreventClose(true);
 
+  // Initialize notifications
+  notificationService = NotificationService();
+  await notificationService.init();
+
   // Initialize timer service
   timerService = TimerService();
   timerService.configure(
@@ -48,6 +54,25 @@ Future<void> main() async {
     longBreakMinutes: settings.longBreakMinutes,
     longBreakInterval: settings.longBreakInterval,
   );
+
+  // Wire timer callbacks to notifications
+  timerService.onPreBreakStart = () {
+    final status = timerService.currentStatus;
+    notificationService.showPreBreakNotification(
+      secondsUntilBreak: status.remainingSeconds,
+      breakType: status.nextBreakType,
+      canPostpone: status.canPostpone,
+      postponesRemaining: status.postponesRemaining,
+    );
+  };
+
+  timerService.onBreakStart = (breakType) {
+    notificationService.showBreakStartNotification(breakType: breakType);
+  };
+
+  timerService.onBreakEnd = () {
+    notificationService.showBreakEndNotification();
+  };
 
   // Initialize system tray
   trayService = TrayService();
@@ -83,13 +108,11 @@ class _BlinkAppState extends ConsumerState<BlinkApp> with WindowListener {
     super.initState();
     windowManager.addListener(this);
 
-    // Wire tray pause button to app state
     trayService.setOnPauseToggle((isPaused) {
       ref.read(appStatusProvider.notifier).set(
           isPaused ? AppStatus.paused : AppStatus.running);
     });
 
-    // Wire tray "Start Break Now" to timer
     trayService.setOnStartBreakNow(() {
       ref.read(timerServiceProvider).startBreakNow();
     });

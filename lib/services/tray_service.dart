@@ -43,6 +43,8 @@ class TrayService {
     switch (status.state) {
       case TimerState.working:
         tooltip = 'Blink - Next break in ${status.remainingFormatted}';
+      case TimerState.preBreak:
+        tooltip = 'Blink - Break starting in ${status.remainingFormatted}';
       case TimerState.onBreak:
         final type =
             status.nextBreakType == BreakType.long ? 'Long break' : 'Break';

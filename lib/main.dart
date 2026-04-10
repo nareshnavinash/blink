@@ -15,6 +15,7 @@ import 'package:blink/services/smart_pause_service.dart';
 import 'package:blink/services/stats_service.dart';
 import 'package:blink/services/pairing_service.dart';
 import 'package:blink/services/sync_service.dart';
+import 'package:blink/services/team_service.dart';
 import 'package:blink/services/tray_service.dart';
 import 'package:blink/ui/break_screen.dart';
 import 'package:blink/ui/home_screen.dart';
@@ -24,6 +25,7 @@ late final TimerService timerService;
 late final ReminderService reminderService;
 late final StatsService statsService;
 late final SyncService syncService;
+late final TeamService teamService;
 late final SmartPauseService smartPauseService;
 late final IdleService idleService;
 late final ScheduleService scheduleService;
@@ -60,6 +62,10 @@ Future<void> main() async {
   // Initialize sync service
   syncService = SyncService();
   await syncService.init(prefs);
+
+  // Initialize team service
+  teamService = TeamService();
+  await teamService.init(prefs);
 
   // Desktop-specific window initialization
   if (_isDesktop) {
@@ -223,6 +229,7 @@ Future<void> main() async {
         statsServiceProvider.overrideWithValue(statsService),
         smartPauseServiceProvider.overrideWithValue(smartPauseService),
         syncServiceProvider.overrideWithValue(syncService),
+        teamServiceProvider.overrideWithValue(teamService),
         if (pairingService != null)
           pairingServiceProvider.overrideWithValue(pairingService!),
       ],

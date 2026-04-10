@@ -6,6 +6,7 @@ import 'package:blink/services/timer_service.dart';
 import 'package:blink/ui/settings_screen.dart';
 import 'package:blink/ui/pomodoro_screen.dart';
 import 'package:blink/ui/stats_screen.dart';
+import 'package:blink/ui/team_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -53,6 +54,17 @@ class HomeScreen extends ConsumerWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const StatsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.people),
+                  tooltip: 'Team',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const TeamScreen(),
                       ),
                     );
                   },

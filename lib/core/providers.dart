@@ -10,6 +10,7 @@ import 'package:blink/services/smart_pause_service.dart';
 import 'package:blink/services/stats_service.dart';
 import 'package:blink/services/pairing_service.dart';
 import 'package:blink/services/sync_service.dart';
+import 'package:blink/services/team_service.dart';
 import 'package:blink/services/timer_service.dart';
 
 // Pairing service provider
@@ -22,6 +23,13 @@ final pairingServiceProvider = Provider<PairingService>((ref) {
 // Sync service provider
 final syncServiceProvider = Provider<SyncService>((ref) {
   final service = SyncService();
+  ref.onDispose(() => service.dispose());
+  return service;
+});
+
+// Team service provider
+final teamServiceProvider = Provider<TeamService>((ref) {
+  final service = TeamService();
   ref.onDispose(() => service.dispose());
   return service;
 });

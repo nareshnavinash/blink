@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 16px; color: #1f2937; }
+    .header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .header h1 { font-size: 16px; font-weight: 700; }
+    .header .icon { font-size: 20px; }
+    .status { text-align: center; padding: 20px 0; }
+    .status-label { font-size: 12px; color: #9ca3af; margin-bottom: 4px; }
+    .status-time { font-size: 32px; font-weight: 200; font-variant-numeric: tabular-nums; }
+    .status-state { font-size: 11px; margin-top: 4px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+    .status-state.working { background: #eff6ff; color: #2563eb; }
+    .status-state.onBreak { background: #f0fdf4; color: #16a34a; }
+    .status-state.paused { background: #fef3c7; color: #d97706; }
+    .controls { display: flex; gap: 8px; margin-bottom: 12px; }
+    .btn { flex: 1; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; font-weight: 500; }
+    .btn:hover { background: #f9fafb; }
+    .btn-primary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+    .btn-primary:hover { background: #2563eb; }
+    .stats { font-size: 11px; color: #9ca3af; text-align: center; padding-top: 8px; border-top: 1px solid #f3f4f6; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 12px; }
+    .toggle-row input { margin: 0; }
+    hr { border: none; border-top: 1px solid #f3f4f6; margin: 12px 0; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="icon">👁</span>
+    <h1>Blink</h1>
+  </div>
+
+  <div class="status">
+    <div class="status-label" id="statusLabel">Next break in</div>
+    <div class="status-time" id="statusTime">--:--</div>
+    <span class="status-state working" id="statusState">Working</span>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="pauseBtn">Pause</button>
+    <button class="btn btn-primary" id="breakBtn">Break Now</button>
+  </div>
+
+  <hr>
+
+  <div class="toggle-row">
+    <label>Break reminders</label>
+    <input type="checkbox" id="breaksToggle" checked>
+  </div>
+  <div class="toggle-row">
+    <label>Blink reminders</label>
+    <input type="checkbox" id="blinkToggle" checked>
+  </div>
+
+  <hr>
+
+  <div class="stats">
+    <span id="breakCount">0</span> breaks taken today
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

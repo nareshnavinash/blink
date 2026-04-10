@@ -1,0 +1,39 @@
+name: blink
+version: '0.1.0'
+summary: Smart break reminders for healthy screen habits
+description: |
+  Cross-platform digital wellness app with smart break reminders,
+  blink & posture nudges, Pomodoro timer, health score, and more.
+  Based on the 20-20-20 rule.
+
+base: core22
+confinement: strict
+grade: stable
+
+parts:
+  blink:
+    plugin: nil
+    source: .
+    build-packages:
+      - clang
+      - cmake
+      - ninja-build
+      - pkg-config
+      - libgtk-3-dev
+      - libblkid-dev
+      - liblzma-dev
+    override-build: |
+      flutter build linux --release
+      cp -r build/linux/x64/release/bundle/* $SNAPCRAFT_PART_INSTALL/
+
+apps:
+  blink:
+    command: blink
+    extensions: [gnome]
+    plugs:
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
+      - network
+      - home

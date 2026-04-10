@@ -1,0 +1,24 @@
+PackageIdentifier: BlinkApp.Blink
+PackageVersion: 0.1.0
+PackageName: Blink
+Publisher: BlinkApp
+License: MIT
+ShortDescription: Smart break reminders for healthy screen habits
+Description: |-
+  Cross-platform digital wellness app with smart break reminders,
+  blink & posture nudges, Pomodoro timer, health score, and more.
+Tags:
+  - break-reminder
+  - eye-strain
+  - digital-wellness
+  - pomodoro
+  - health
+  - productivity
+PackageUrl: https://blinkapp.dev
+Installers:
+  - Architecture: x64
+    InstallerType: zip
+    InstallerUrl: https://github.com/blinkapp/blink/releases/download/v0.1.0/Blink-0.1.0-windows.zip
+    InstallerSha256: ""  # TODO: fill after build
+ManifestType: singleton
+ManifestVersion: 1.4.0

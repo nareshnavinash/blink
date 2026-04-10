@@ -90,6 +90,7 @@ class HomeScreen extends ConsumerWidget {
                 ref.read(settingsProvider.notifier).update(
                   (s) => s.copyWith(blinkRemindersEnabled: value),
                 );
+                ref.read(reminderServiceProvider).updateBlinkEnabled(value);
               },
             ),
             _SettingsTile(
@@ -100,6 +101,7 @@ class HomeScreen extends ConsumerWidget {
                 ref.read(settingsProvider.notifier).update(
                   (s) => s.copyWith(postureRemindersEnabled: value),
                 );
+                ref.read(reminderServiceProvider).updatePostureEnabled(value);
               },
             ),
           ],

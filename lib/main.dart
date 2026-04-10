@@ -5,6 +5,7 @@ import 'package:blink/core/providers.dart';
 import 'package:blink/services/notification_service.dart';
 import 'package:blink/services/storage_service.dart';
 import 'package:blink/services/timer_service.dart';
+import 'package:blink/services/reminder_service.dart';
 import 'package:blink/services/tray_service.dart';
 import 'package:blink/ui/home_screen.dart';
 import 'package:blink/ui/break_screen.dart';
@@ -12,6 +13,7 @@ import 'package:blink/ui/break_screen.dart';
 late final TrayService trayService;
 late final TimerService timerService;
 late final NotificationService notificationService;
+late final ReminderService reminderService;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,21 +77,32 @@ Future<void> main() async {
     notificationService.showBreakEndNotification();
   };
 
+  // Initialize reminder service
+  reminderService = ReminderService();
+  reminderService.configure(
+    blinkIntervalMinutes: 10,
+    postureIntervalMinutes: 30,
+    blinkEnabled: settings.blinkRemindersEnabled,
+    postureEnabled: settings.postureRemindersEnabled,
+  );
+
   // Initialize system tray
   trayService = TrayService();
   await trayService.init();
   trayService.listenToTimer(timerService);
 
-  // Start the first work session
+  // Start the first work session and reminders
   if (settings.breaksEnabled) {
     timerService.startWorkSession();
   }
+  reminderService.start();
 
   runApp(
     ProviderScope(
       overrides: [
         storageServiceProvider.overrideWithValue(storageService),
         timerServiceProvider.overrideWithValue(timerService),
+        reminderServiceProvider.overrideWithValue(reminderService),
       ],
       child: const BlinkApp(),
     ),

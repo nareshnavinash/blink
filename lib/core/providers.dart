@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:blink/features/settings/settings_model.dart';
+import 'package:blink/services/reminder_service.dart';
 import 'package:blink/services/storage_service.dart';
 import 'package:blink/services/timer_service.dart';
 
@@ -12,6 +12,13 @@ final storageServiceProvider = Provider<StorageService>((ref) {
 // Timer service provider (singleton)
 final timerServiceProvider = Provider<TimerService>((ref) {
   final service = TimerService();
+  ref.onDispose(() => service.dispose());
+  return service;
+});
+
+// Reminder service provider (singleton)
+final reminderServiceProvider = Provider<ReminderService>((ref) {
+  final service = ReminderService();
   ref.onDispose(() => service.dispose());
   return service;
 });
@@ -59,21 +66,27 @@ class AppStatusNotifier extends Notifier<AppStatus> {
 
   void toggle() {
     final timerService = ref.read(timerServiceProvider);
+    final reminderService = ref.read(reminderServiceProvider);
     if (state == AppStatus.running) {
       timerService.pause();
+      reminderService.stop();
       state = AppStatus.paused;
     } else {
       timerService.resume();
+      reminderService.start();
       state = AppStatus.running;
     }
   }
 
   void set(AppStatus status) {
     final timerService = ref.read(timerServiceProvider);
+    final reminderService = ref.read(reminderServiceProvider);
     if (status == AppStatus.paused) {
       timerService.pause();
+      reminderService.stop();
     } else {
       timerService.resume();
+      reminderService.start();
     }
     state = status;
   }

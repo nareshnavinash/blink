@@ -5,6 +5,7 @@ import 'package:blink/services/reminder_service.dart';
 import 'package:blink/services/schedule_service.dart';
 import 'package:blink/services/storage_service.dart';
 import 'package:blink/services/pomodoro_service.dart';
+import 'package:blink/services/smart_pause_service.dart';
 import 'package:blink/services/stats_service.dart';
 import 'package:blink/services/timer_service.dart';
 
@@ -37,6 +38,13 @@ final idleServiceProvider = Provider<IdleService>((ref) {
 // Schedule service provider
 final scheduleServiceProvider = Provider<ScheduleService>((ref) {
   final service = ScheduleService();
+  ref.onDispose(() => service.dispose());
+  return service;
+});
+
+// Smart pause service provider
+final smartPauseServiceProvider = Provider<SmartPauseService>((ref) {
+  final service = SmartPauseService();
   ref.onDispose(() => service.dispose());
   return service;
 });

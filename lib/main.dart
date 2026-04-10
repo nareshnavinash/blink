@@ -9,6 +9,7 @@ import 'package:blink/services/timer_service.dart';
 import 'package:blink/services/reminder_service.dart';
 import 'package:blink/services/idle_service.dart';
 import 'package:blink/services/schedule_service.dart';
+import 'package:blink/services/smart_pause_service.dart';
 import 'package:blink/services/stats_service.dart';
 import 'package:blink/services/tray_service.dart';
 import 'package:blink/ui/home_screen.dart';
@@ -19,6 +20,7 @@ late final TimerService timerService;
 late final NotificationService notificationService;
 late final ReminderService reminderService;
 late final StatsService statsService;
+late final SmartPauseService smartPauseService;
 late final IdleService idleService;
 late final ScheduleService scheduleService;
 
@@ -126,6 +128,20 @@ Future<void> main() async {
   };
   scheduleService.start();
 
+  // Initialize smart pause
+  smartPauseService = SmartPauseService();
+  smartPauseService.configure(const SmartPauseConfig());
+  smartPauseService.onPauseChanged = (shouldPause, reason) {
+    if (shouldPause) {
+      timerService.pause();
+      reminderService.stop();
+    } else {
+      timerService.resume();
+      reminderService.start();
+    }
+  };
+  smartPauseService.start();
+
   // Initialize system tray
   trayService = TrayService();
   await trayService.init();
@@ -146,6 +162,7 @@ Future<void> main() async {
         idleServiceProvider.overrideWithValue(idleService),
         scheduleServiceProvider.overrideWithValue(scheduleService),
         statsServiceProvider.overrideWithValue(statsService),
+        smartPauseServiceProvider.overrideWithValue(smartPauseService),
       ],
       child: const BlinkApp(),
     ),

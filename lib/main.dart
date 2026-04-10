@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:blink/core/providers.dart';
 import 'package:blink/services/storage_service.dart';
+import 'package:blink/services/timer_service.dart';
 import 'package:blink/services/tray_service.dart';
 import 'package:blink/ui/home_screen.dart';
 
 late final TrayService trayService;
+late final TimerService timerService;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,17 +38,32 @@ Future<void> main() async {
     }
   });
 
-  // Minimize to tray on close instead of quitting
   await windowManager.setPreventClose(true);
+
+  // Initialize timer service
+  timerService = TimerService();
+  timerService.configure(
+    workMinutes: settings.workMinutes,
+    breakSeconds: settings.breakSeconds,
+    longBreakMinutes: settings.longBreakMinutes,
+    longBreakInterval: settings.longBreakInterval,
+  );
 
   // Initialize system tray
   trayService = TrayService();
   await trayService.init();
+  trayService.listenToTimer(timerService);
+
+  // Start the first work session
+  if (settings.breaksEnabled) {
+    timerService.startWorkSession();
+  }
 
   runApp(
     ProviderScope(
       overrides: [
         storageServiceProvider.overrideWithValue(storageService),
+        timerServiceProvider.overrideWithValue(timerService),
       ],
       child: const BlinkApp(),
     ),
@@ -70,6 +87,11 @@ class _BlinkAppState extends ConsumerState<BlinkApp> with WindowListener {
     trayService.setOnPauseToggle((isPaused) {
       ref.read(appStatusProvider.notifier).set(
           isPaused ? AppStatus.paused : AppStatus.running);
+    });
+
+    // Wire tray "Start Break Now" to timer
+    trayService.setOnStartBreakNow(() {
+      ref.read(timerServiceProvider).startBreakNow();
     });
   }
 

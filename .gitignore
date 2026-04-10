@@ -22,10 +22,26 @@ windows/flutter/ephemeral/
 # Linux
 linux/flutter/ephemeral/
 
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+ios/Flutter/.last_build_id
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+
 # Pub
 .pub-cache/
 .pub/
 pubspec.lock
+
+# Flutter generated
+.flutter-plugins
+.flutter-plugins-dependencies
 
 # Generated
 *.g.dart

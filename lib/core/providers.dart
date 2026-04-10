@@ -8,7 +8,15 @@ import 'package:blink/services/storage_service.dart';
 import 'package:blink/services/pomodoro_service.dart';
 import 'package:blink/services/smart_pause_service.dart';
 import 'package:blink/services/stats_service.dart';
+import 'package:blink/services/pairing_service.dart';
 import 'package:blink/services/timer_service.dart';
+
+// Pairing service provider
+final pairingServiceProvider = Provider<PairingService>((ref) {
+  final service = PairingService(role: PairingRole.mobile);
+  ref.onDispose(() => service.dispose());
+  return service;
+});
 
 // Storage service provider
 final storageServiceProvider = Provider<StorageService>((ref) {

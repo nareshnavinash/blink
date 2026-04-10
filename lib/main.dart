@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:blink/core/providers.dart';
 import 'package:blink/services/notification_service.dart';
+import 'package:blink/services/mobile_notification_service.dart';
 import 'package:blink/services/storage_service.dart';
 import 'package:blink/services/timer_service.dart';
 import 'package:blink/services/reminder_service.dart';
@@ -11,22 +13,37 @@ import 'package:blink/services/idle_service.dart';
 import 'package:blink/services/schedule_service.dart';
 import 'package:blink/services/smart_pause_service.dart';
 import 'package:blink/services/stats_service.dart';
+import 'package:blink/services/pairing_service.dart';
 import 'package:blink/services/tray_service.dart';
-import 'package:blink/ui/home_screen.dart';
 import 'package:blink/ui/break_screen.dart';
+import 'package:blink/ui/home_screen.dart';
+import 'package:blink/ui/mobile/mobile_home_screen.dart';
 
-late final TrayService trayService;
 late final TimerService timerService;
-late final NotificationService notificationService;
 late final ReminderService reminderService;
 late final StatsService statsService;
 late final SmartPauseService smartPauseService;
 late final IdleService idleService;
 late final ScheduleService scheduleService;
 
+// Desktop-only globals
+TrayService? trayService;
+NotificationService? desktopNotificationService;
+
+// Mobile-only globals
+MobileNotificationService? mobileNotificationService;
+PairingService? pairingService;
+
+bool get _isDesktop => Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+bool get _isMobile => Platform.isIOS || Platform.isAndroid;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+
+  // Desktop window setup
+  if (_isDesktop) {
+    await windowManager.ensureInitialized();
+  }
 
   // Initialize storage
   final storageService = StorageService();
@@ -38,32 +55,45 @@ Future<void> main() async {
   statsService = StatsService();
   await statsService.init(prefs);
 
-  // Initialize window
-  const windowOptions = WindowOptions(
-    size: Size(480, 640),
-    minimumSize: Size(400, 500),
-    center: true,
-    title: 'Blink',
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.normal,
-  );
+  // Desktop-specific window initialization
+  if (_isDesktop) {
+    final windowOptions = WindowOptions(
+      size: const Size(480, 640),
+      minimumSize: const Size(400, 500),
+      center: true,
+      title: 'Blink',
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+    );
 
-  await windowManager.waitUntilReadyToShow(windowOptions, () async {
-    if (settings.startMinimized) {
-      await windowManager.hide();
-    } else {
-      await windowManager.show();
-      await windowManager.focus();
-    }
-  });
+    await windowManager.waitUntilReadyToShow(windowOptions, () async {
+      if (settings.startMinimized) {
+        await windowManager.hide();
+      } else {
+        await windowManager.show();
+        await windowManager.focus();
+      }
+    });
 
-  await windowManager.setPreventClose(true);
+    await windowManager.setPreventClose(true);
 
-  // Initialize notifications
-  notificationService = NotificationService();
-  await notificationService.init();
+    desktopNotificationService = NotificationService();
+    await desktopNotificationService!.init();
 
-  // Initialize timer service
+    // Start pairing server on desktop
+    pairingService = PairingService(role: PairingRole.desktop);
+    await pairingService!.startServer();
+  }
+
+  // Mobile-specific initialization
+  if (_isMobile) {
+    mobileNotificationService = MobileNotificationService();
+    await mobileNotificationService!.init();
+
+    pairingService = PairingService(role: PairingRole.mobile);
+  }
+
+  // Initialize timer service (shared)
   timerService = TimerService();
   timerService.configure(
     workMinutes: settings.workMinutes,
@@ -72,80 +102,103 @@ Future<void> main() async {
     longBreakInterval: settings.longBreakInterval,
   );
 
-  // Wire timer callbacks to notifications
+  // Wire timer callbacks to platform-appropriate notifications
   timerService.onPreBreakStart = () {
     final status = timerService.currentStatus;
-    notificationService.showPreBreakNotification(
-      secondsUntilBreak: status.remainingSeconds,
-      breakType: status.nextBreakType,
-      canPostpone: status.canPostpone,
-      postponesRemaining: status.postponesRemaining,
-    );
+    if (_isDesktop) {
+      desktopNotificationService?.showPreBreakNotification(
+        secondsUntilBreak: status.remainingSeconds,
+        breakType: status.nextBreakType,
+        canPostpone: status.canPostpone,
+        postponesRemaining: status.postponesRemaining,
+      );
+    } else {
+      mobileNotificationService?.showPreBreakNotification(
+        secondsUntilBreak: status.remainingSeconds,
+        breakType: status.nextBreakType,
+        canPostpone: status.canPostpone,
+        postponesRemaining: status.postponesRemaining,
+      );
+    }
   };
 
   timerService.onBreakStart = (breakType) {
-    notificationService.showBreakStartNotification(breakType: breakType);
+    if (_isDesktop) {
+      desktopNotificationService?.showBreakStartNotification(breakType: breakType);
+    } else {
+      mobileNotificationService?.showBreakStartNotification(breakType: breakType);
+    }
+    pairingService?.sendEvent(PairingSyncEvent.breakStart);
   };
 
   timerService.onBreakEnd = () {
-    notificationService.showBreakEndNotification();
+    if (_isDesktop) {
+      desktopNotificationService?.showBreakEndNotification();
+    } else {
+      mobileNotificationService?.showBreakEndNotification();
+    }
     statsService.recordBreakTaken();
+    pairingService?.sendEvent(PairingSyncEvent.breakEnd);
   };
 
-  // Initialize reminder service
+  // Initialize reminder service (shared)
   reminderService = ReminderService();
   reminderService.configure(
-    blinkIntervalMinutes: 10,
-    postureIntervalMinutes: 30,
+    blinkIntervalMinutes: settings.blinkIntervalMinutes,
+    postureIntervalMinutes: settings.postureIntervalMinutes,
     blinkEnabled: settings.blinkRemindersEnabled,
     postureEnabled: settings.postureRemindersEnabled,
   );
 
-  // Initialize idle detection
-  idleService = IdleService();
-  idleService.configure(idleThresholdSeconds: 180);
-  idleService.onIdleChanged = (isIdle) {
-    if (isIdle) {
-      timerService.pause();
-      reminderService.stop();
-    } else {
-      timerService.resume();
-      reminderService.start();
-    }
-  };
-  await idleService.start();
+  // Desktop-only services
+  if (_isDesktop) {
+    idleService = IdleService();
+    idleService.configure(idleThresholdSeconds: settings.idleThresholdMinutes * 60);
+    idleService.onIdleChanged = (isIdle) {
+      if (isIdle) {
+        timerService.pause();
+        reminderService.stop();
+      } else {
+        timerService.resume();
+        reminderService.start();
+      }
+    };
+    await idleService.start();
 
-  // Initialize schedule service
-  scheduleService = ScheduleService();
-  scheduleService.onScheduleChanged = (isWithinSchedule) {
-    if (isWithinSchedule) {
-      timerService.resume();
-      reminderService.start();
-    } else {
-      timerService.pause();
-      reminderService.stop();
-    }
-  };
-  scheduleService.start();
+    scheduleService = ScheduleService();
+    scheduleService.onScheduleChanged = (isWithinSchedule) {
+      if (isWithinSchedule) {
+        timerService.resume();
+        reminderService.start();
+      } else {
+        timerService.pause();
+        reminderService.stop();
+      }
+    };
+    scheduleService.start();
 
-  // Initialize smart pause
-  smartPauseService = SmartPauseService();
-  smartPauseService.configure(const SmartPauseConfig());
-  smartPauseService.onPauseChanged = (shouldPause, reason) {
-    if (shouldPause) {
-      timerService.pause();
-      reminderService.stop();
-    } else {
-      timerService.resume();
-      reminderService.start();
-    }
-  };
-  smartPauseService.start();
+    smartPauseService = SmartPauseService();
+    smartPauseService.configure(const SmartPauseConfig());
+    smartPauseService.onPauseChanged = (shouldPause, reason) {
+      if (shouldPause) {
+        timerService.pause();
+        reminderService.stop();
+      } else {
+        timerService.resume();
+        reminderService.start();
+      }
+    };
+    smartPauseService.start();
 
-  // Initialize system tray
-  trayService = TrayService();
-  await trayService.init();
-  trayService.listenToTimer(timerService);
+    trayService = TrayService();
+    await trayService!.init();
+    trayService!.listenToTimer(timerService);
+  } else {
+    // Provide defaults for mobile so providers don't crash
+    idleService = IdleService();
+    scheduleService = ScheduleService();
+    smartPauseService = SmartPauseService();
+  }
 
   // Start the first work session and reminders
   if (settings.breaksEnabled) {
@@ -163,6 +216,8 @@ Future<void> main() async {
         scheduleServiceProvider.overrideWithValue(scheduleService),
         statsServiceProvider.overrideWithValue(statsService),
         smartPauseServiceProvider.overrideWithValue(smartPauseService),
+        if (pairingService != null)
+          pairingServiceProvider.overrideWithValue(pairingService!),
       ],
       child: const BlinkApp(),
     ),
@@ -183,21 +238,24 @@ class _BlinkAppState extends ConsumerState<BlinkApp> with WindowListener {
   @override
   void initState() {
     super.initState();
-    windowManager.addListener(this);
 
-    trayService.setOnPauseToggle((isPaused) {
-      ref.read(appStatusProvider.notifier).set(
-          isPaused ? AppStatus.paused : AppStatus.running);
-    });
-
-    trayService.setOnStartBreakNow(() {
-      ref.read(timerServiceProvider).startBreakNow();
-    });
+    if (_isDesktop) {
+      windowManager.addListener(this);
+      trayService?.setOnPauseToggle((isPaused) {
+        ref.read(appStatusProvider.notifier).set(
+            isPaused ? AppStatus.paused : AppStatus.running);
+      });
+      trayService?.setOnStartBreakNow(() {
+        ref.read(timerServiceProvider).startBreakNow();
+      });
+    }
   }
 
   @override
   void dispose() {
-    windowManager.removeListener(this);
+    if (_isDesktop) {
+      windowManager.removeListener(this);
+    }
     super.dispose();
   }
 
@@ -207,12 +265,13 @@ class _BlinkAppState extends ConsumerState<BlinkApp> with WindowListener {
   }
 
   void _handleTimerStatus(TimerStatus status) {
+    if (!_isDesktop) return;
+
     final navigator = _navigatorKey.currentState;
     if (navigator == null) return;
 
     if (status.state == TimerState.onBreak && !_isBreakScreenShowing) {
       _isBreakScreenShowing = true;
-      // Show window if hidden during break
       windowManager.show();
       windowManager.focus();
       navigator.push(
@@ -234,7 +293,6 @@ class _BlinkAppState extends ConsumerState<BlinkApp> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    // Listen to timer status for break screen navigation
     ref.listen<AsyncValue<TimerStatus>>(timerStatusProvider, (prev, next) {
       next.whenData(_handleTimerStatus);
     });
@@ -254,7 +312,7 @@ class _BlinkAppState extends ConsumerState<BlinkApp> with WindowListener {
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+      home: _isMobile ? const MobileHomeScreen() : const HomeScreen(),
     );
   }
 }

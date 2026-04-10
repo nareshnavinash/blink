@@ -4,6 +4,7 @@ import 'package:blink/core/app_constants.dart';
 import 'package:blink/core/providers.dart';
 import 'package:blink/services/timer_service.dart';
 import 'package:blink/ui/settings_screen.dart';
+import 'package:blink/ui/pomodoro_screen.dart';
 import 'package:blink/ui/stats_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -35,6 +36,17 @@ class HomeScreen extends ConsumerWidget {
                 const Spacer(),
                 _StatusChip(appStatus: appStatus),
                 const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.timer),
+                  tooltip: 'Pomodoro',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PomodoroScreen(),
+                      ),
+                    );
+                  },
+                ),
                 IconButton(
                   icon: const Icon(Icons.bar_chart),
                   onPressed: () {

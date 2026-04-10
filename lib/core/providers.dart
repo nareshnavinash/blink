@@ -4,6 +4,7 @@ import 'package:blink/services/idle_service.dart';
 import 'package:blink/services/reminder_service.dart';
 import 'package:blink/services/schedule_service.dart';
 import 'package:blink/services/storage_service.dart';
+import 'package:blink/services/pomodoro_service.dart';
 import 'package:blink/services/stats_service.dart';
 import 'package:blink/services/timer_service.dart';
 
@@ -38,6 +39,19 @@ final scheduleServiceProvider = Provider<ScheduleService>((ref) {
   final service = ScheduleService();
   ref.onDispose(() => service.dispose());
   return service;
+});
+
+// Pomodoro service provider
+final pomodoroServiceProvider = Provider<PomodoroService>((ref) {
+  final service = PomodoroService();
+  ref.onDispose(() => service.dispose());
+  return service;
+});
+
+// Pomodoro status stream provider
+final pomodoroStatusProvider = StreamProvider<PomodoroStatus>((ref) {
+  final service = ref.watch(pomodoroServiceProvider);
+  return service.statusStream;
 });
 
 // Stats service provider

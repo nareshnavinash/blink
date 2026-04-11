@@ -6,6 +6,7 @@
   <title>Chirp - Smart Break Reminders for Healthy Screen Habits</title>
   <meta name="description" content="Free cross-platform digital wellness app with smart break reminders, blink &amp; posture nudges, Pomodoro timer, and health score. Mac, Windows, Linux, iOS, Android.">
   <meta name="keywords" content="break reminder, eye strain, 20-20-20 rule, digital wellness, screen time, pomodoro, posture reminder, free break reminder app, eye care app">
+  <meta name="theme-color" content="#2A1F3D">
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Chirp - Smart Break Reminders for Healthy Screen Habits">
@@ -29,10 +30,16 @@
     "softwareVersion": "0.1.0",
     "license": "https://opensource.org/licenses/MIT",
     "screenshot": "https://chirpapp.dev/images/screenshots/app_home.png",
-    "featureList": "Break reminders, Blink reminders, Posture reminders, Pomodoro timer, Health score, Smart Pause, Team dashboard, Browser extension"
+    "featureList": "Break reminders, Blink reminders, Posture reminders, Pomodoro timer, Health score, Smart Pause, Team dashboard"
   }
   </script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
@@ -47,16 +54,17 @@
   <meta property="og:image:height" content="630">
 </head>
 <body>
+
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-container">
-      <a href="/" class="nav-logo">
+      <a href="./" class="nav-logo">
         <img src="images/favicon-32x32.png" alt="Chirp" width="24" height="24" class="nav-logo-icon"> Chirp
       </a>
       <div class="nav-links">
         <a href="#features">Features</a>
-        <a href="#pricing">Free &amp; Open</a>
-        <a href="/blog/">Blog</a>
+        <a href="https://github.com/nareshnavinash/blink" target="_blank" rel="noopener">GitHub</a>
+        <a href="blog/">Blog</a>
         <a href="#download" class="btn btn-primary btn-sm">Download Free</a>
       </div>
       <button class="nav-toggle" aria-label="Menu">&#9776;</button>
@@ -68,40 +76,48 @@
     <div class="container">
       <h1>Your eyes deserve a break.</h1>
       <p class="hero-subtitle">
-        The only free, cross-platform break reminder with smart meeting detection, Pomodoro timer, and zero tracking.
-        Works on Mac, Windows, Linux, iOS, Android &amp; your browser.
+        Free, open-source break reminders with the 20-20-20 rule. Smart meeting detection. Zero tracking. Every platform.
       </p>
       <div class="hero-cta">
         <a href="#download" class="btn btn-primary btn-lg">Download for Free</a>
-        <a href="#features" class="btn btn-ghost btn-lg">See Features</a>
+        <a href="https://github.com/nareshnavinash/blink" class="btn btn-ghost-white btn-lg" target="_blank" rel="noopener">View on GitHub</a>
       </div>
-      <div class="hero-screenshots" style="display: flex; justify-content: center; gap: 24px; margin: 40px 0 24px; flex-wrap: wrap;">
-        <img src="images/screenshots/app_home.png" alt="Chirp home screen with break timer" width="240" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
-        <img src="images/screenshots/app_break_overlay.png" alt="Chirp break overlay covering all monitors" width="380" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
-      </div>
-      <div class="hero-platforms">
-        Available on macOS, Windows, Linux, iOS &amp; Android
+      <p class="hero-platforms">Available on macOS, Windows, Linux, iOS &amp; Android</p>
+
+      <div class="hero-devices">
+        <div class="device-frame device-home">
+          <img src="images/screenshots/app_home.png" alt="Chirp home screen with break timer" loading="eager">
+        </div>
+        <div class="device-frame device-break">
+          <img src="images/screenshots/app_break_overlay.png" alt="Chirp break overlay covering all monitors" loading="eager">
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Social Proof -->
-  <section style="padding: 32px 0; text-align: center; border-bottom: 1px solid var(--gray-200);">
-    <div class="container" style="display: flex; justify-content: center; align-items: center; gap: 32px; flex-wrap: wrap;">
-      <div style="color: var(--gray-600); font-size: 0.9rem;">
-        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">5+</strong> Platforms supported
-      </div>
-      <div style="width: 1px; height: 40px; background: var(--gray-200);"></div>
-      <div style="color: var(--gray-600); font-size: 0.9rem;">
-        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">$0</strong> Forever, all features
-      </div>
-      <div style="width: 1px; height: 40px; background: var(--gray-200);"></div>
-      <div style="color: var(--gray-600); font-size: 0.9rem;">
-        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">0</strong> Data collected
-      </div>
-      <div style="width: 1px; height: 40px; background: var(--gray-200);"></div>
-      <div style="color: var(--gray-600); font-size: 0.9rem;">
-        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">MIT</strong> Open source
+  <!-- Value Proposition Strip -->
+  <section class="value-strip">
+    <div class="container">
+      <div class="value-strip-inner reveal">
+        <div class="value-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>100% Free, Forever</span>
+        </div>
+        <div class="value-divider"></div>
+        <div class="value-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+          <span>Open Source (MIT)</span>
+        </div>
+        <div class="value-divider"></div>
+        <div class="value-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <span>Zero Data Collected</span>
+        </div>
+        <div class="value-divider"></div>
+        <div class="value-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Every Platform</span>
+        </div>
       </div>
     </div>
   </section>
@@ -109,196 +125,166 @@
   <!-- Features -->
   <section id="features" class="features">
     <div class="container">
-      <h2>Everything you need for healthy screen habits</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">⏱</div>
+      <h2 class="reveal">Everything you need for healthy screen habits</h2>
+      <p class="features-subtitle reveal">Smart, gentle reminders that fit your workflow</p>
+      <div class="features-grid reveal-stagger">
+        <div class="feature-card reveal">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
           <h3>Smart Break Timer</h3>
-          <p>Customizable work/break intervals based on the 20-20-20 rule. Short eye breaks and long stretch breaks.</p>
+          <p>The 20-20-20 rule, automated. Short eye breaks and long stretch breaks, customizable to your rhythm.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">👁</div>
-          <h3>Blink Reminders</h3>
-          <p>Gentle periodic nudges to blink. We blink 66% less when staring at screens.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🧘</div>
-          <h3>Posture Check</h3>
-          <p>Regular posture reminders to sit up straight and roll your shoulders back.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🍅</div>
-          <h3>Pomodoro Timer</h3>
-          <p>Built-in Pomodoro technique with 25/5/15 cycles. Focus and break in rhythm.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Health Score</h3>
-          <p>Daily 0-100 health score tracking breaks taken, skipped, and session lengths.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🤖</div>
+        <div class="feature-card reveal">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/><path d="M20 2l-2 2 2 2" opacity="0.5"/><path d="M4 18l-2 2 2 2" opacity="0.5"/></svg>
+          </div>
           <h3>Smart Pause</h3>
-          <p>Auto-pauses during meetings, video playback, gaming, and your focus apps.</p>
+          <p>Auto-pauses during meetings, video calls, and fullscreen apps. Never interrupts at the wrong time.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔔</div>
-          <h3>Custom Reminders</h3>
-          <p>Create your own reminders: drink water, stretch neck, take medicine — anything.</p>
+        <div class="feature-card reveal">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Blink &amp; Posture Nudges</h3>
+          <p>Gentle reminders to blink (we blink 66% less at screens) and check your posture throughout the day.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <h3>Mobile Companion</h3>
-          <p>iOS &amp; Android app that syncs breaks from your desktop and works standalone.</p>
+        <div class="feature-card reveal">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><circle cx="12" cy="2" r="1" fill="#9B7EC8"/><path d="M10 1.5c.5-.3 1.2-.5 2-.5s1.5.2 2 .5" stroke-width="1.5"/></svg>
+          </div>
+          <h3>Pomodoro Timer</h3>
+          <p>Built-in 25/5/15 Pomodoro cycles that integrate with your break schedule. Focus and rest in rhythm.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">👥</div>
-          <h3>Team Dashboard</h3>
-          <p>Admin controls, aggregate health scores, and break compliance for your team.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Comparison -->
-  <section class="comparison">
-    <div class="container">
-      <h2>How Chirp compares</h2>
-      <div class="comparison-table-wrapper">
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Feature</th>
-              <th class="highlight">Chirp</th>
-              <th>LookAway</th>
-              <th>Stretchly</th>
-              <th>Time Out</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Price</td><td class="highlight">Free forever</td><td>$19-29</td><td>Free</td><td>Freemium</td></tr>
-            <tr><td>Mac + Windows + Linux</td><td class="highlight">&#10003;</td><td>Mac only</td><td>&#10003;</td><td>Mac only</td></tr>
-            <tr><td>iOS &amp; Android</td><td class="highlight">&#10003;</td><td>iPhone only</td><td>&#10007;</td><td>&#10007;</td></tr>
-            <tr><td>Smart Pause (meetings, video)</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>Idle only</td><td>&#10007;</td></tr>
-            <tr><td>Pomodoro timer</td><td class="highlight">&#10003;</td><td>&#10007;</td><td>&#10007;</td><td>&#10007;</td></tr>
-            <tr><td>Blink &amp; posture reminders</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10007;</td><td>&#10007;</td></tr>
-            <tr><td>Health score &amp; stats</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10007;</td><td>Limited</td></tr>
-            <tr><td>Custom reminders</td><td class="highlight">&#10003;</td><td>&#10007;</td><td>&#10007;</td><td>&#10007;</td></tr>
-            <tr><td>Team dashboard</td><td class="highlight">&#10003;</td><td>&#10007;</td><td>&#10007;</td><td>&#10007;</td></tr>
-            <tr><td>Browser extension</td><td class="highlight">&#10003;</td><td>&#10007;</td><td>&#10007;</td><td>&#10007;</td></tr>
-            <tr><td>Zero tracking / telemetry</td><td class="highlight">&#10003;</td><td>&#10007;</td><td>&#10003;</td><td>&#10007;</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="pricing">
-    <div class="container">
-      <h2>Completely free. No catch.</h2>
-      <p class="pricing-subtitle">Every feature. Every platform. No upsells, no tracking, no premium tier.</p>
-      <div class="pricing-grid">
-        <div class="pricing-card pricing-card-featured" style="max-width: 480px; margin: 0 auto;">
-          <div class="pricing-price">$0</div>
-          <div class="pricing-period">forever — all features included</div>
-          <ul class="pricing-features">
-            <li>Break reminders (20-20-20)</li>
-            <li>Blink &amp; posture nudges</li>
-            <li>Smart Pause (meetings, video)</li>
-            <li>Pomodoro timer</li>
-            <li>Custom reminders</li>
-            <li>Health score &amp; advanced stats</li>
-            <li>Team dashboard &amp; admin controls</li>
-            <li>All 5 platforms + browser extension</li>
-            <li>Mobile sync</li>
-          </ul>
-          <a href="#download" class="btn btn-primary">Download Free</a>
+        <div class="feature-card reveal">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B7EC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          </div>
+          <h3>Health Score &amp; Stats</h3>
+          <p>Daily 0-100 wellness score tracking breaks taken, skipped, and session patterns over time.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Privacy -->
-  <section class="privacy">
+  <!-- App Showcase -->
+  <section class="showcase">
     <div class="container">
-      <h2>Your data stays on your device</h2>
-      <p class="privacy-subtitle">Chirp has zero analytics, zero telemetry, and zero tracking. No accounts required. Your break stats, health scores, and settings live on your machine — nowhere else. Optional sync goes only to your own server.</p>
+      <div class="showcase-panel">
+        <div class="showcase-text reveal-left">
+          <h3>Focus without worry</h3>
+          <p>Set your ideal work/break rhythm and let Chirp handle the rest. The timer counts down in your menu bar &mdash; invisible until it's time to rest your eyes.</p>
+        </div>
+        <div class="showcase-image showcase-home reveal-right">
+          <div class="device-frame">
+            <img src="images/screenshots/app_home.png" alt="Chirp home screen showing 20-minute timer" loading="lazy">
+          </div>
+        </div>
+      </div>
+      <div class="showcase-panel reverse">
+        <div class="showcase-text reveal-right">
+          <h3>A break that actually helps</h3>
+          <p>When it's time, Chirp gently covers your screen with a calming overlay. Look away for 20 seconds. Skip if you need to. That's it.</p>
+        </div>
+        <div class="showcase-image showcase-break reveal-left">
+          <div class="device-frame">
+            <img src="images/screenshots/app_break_overlay.png" alt="Chirp break overlay with eye break reminder" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Source & Privacy -->
+  <section class="opensource">
+    <div class="container">
+      <p class="opensource-eyebrow reveal">Open Source &amp; Private</p>
+      <h2 class="reveal">Built in the open. Your data stays yours.</h2>
+      <p class="opensource-body reveal">
+        Chirp is MIT-licensed and built publicly on GitHub. No accounts, no analytics, no telemetry.
+        Your break stats and settings live on your device and nowhere else.
+      </p>
+      <div class="reveal">
+        <a href="https://github.com/nareshnavinash/blink" class="opensource-link" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#9B7EC8"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Browse the source on GitHub
+        </a>
+      </div>
+      <div class="trust-pills reveal">
+        <span class="trust-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>
+          MIT License
+        </span>
+        <span class="trust-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+          Zero Telemetry
+        </span>
+        <span class="trust-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          Local-only Data
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Highlights -->
+  <section class="blog-section">
+    <div class="container">
+      <h2 class="reveal">From the Blog</h2>
+      <p class="blog-section-subtitle reveal">Tips on eye health, productivity, and digital wellness</p>
+      <div class="blog-grid reveal-stagger">
+        <a href="blog/20-20-20-rule.html" class="blog-card reveal">
+          <span class="blog-card-tag">Eye Health</span>
+          <h3>The 20-20-20 Rule: What Science Says</h3>
+          <p>The most widely recommended guideline for preventing digital eye strain.</p>
+        </a>
+        <a href="blog/pomodoro-break-reminders.html" class="blog-card reveal">
+          <span class="blog-card-tag">Productivity</span>
+          <h3>Pomodoro + Break Reminders</h3>
+          <p>Combine focus technique with eye care for the perfect productivity stack.</p>
+        </a>
+        <a href="blog/best-break-reminder-apps-2026.html" class="blog-card reveal">
+          <span class="blog-card-tag">Guides</span>
+          <h3>Best Break Reminder Apps in 2026</h3>
+          <p>A detailed roundup comparing Chirp, LookAway, Stretchly, and more.</p>
+        </a>
+      </div>
+      <p class="blog-view-all reveal"><a href="blog/" class="btn btn-ghost btn-sm">View All Posts</a></p>
     </div>
   </section>
 
   <!-- Download -->
   <section id="download" class="download">
     <div class="container">
-      <h2>Download Chirp</h2>
-      <p class="download-subtitle" id="platform-detect">Detecting your platform...</p>
-      <div class="download-buttons">
-        <a href="#" class="btn btn-primary btn-lg download-btn" data-platform="macos">
+      <h2 class="reveal">Ready to give your eyes a break?</h2>
+      <p class="download-subtitle reveal" id="platform-detect">Free, open source, available everywhere.</p>
+      <div class="download-buttons reveal">
+        <a href="https://github.com/nareshnavinash/blink/releases/latest" class="btn btn-white btn-lg download-btn" data-platform="macos">
           Download for Mac
         </a>
-        <a href="#" class="btn btn-ghost btn-lg download-btn" data-platform="windows">
+        <a href="https://github.com/nareshnavinash/blink/releases/latest" class="btn btn-ghost-white btn-lg download-btn" data-platform="windows">
           Download for Windows
         </a>
-        <a href="#" class="btn btn-ghost btn-lg download-btn" data-platform="linux">
+        <a href="https://github.com/nareshnavinash/blink/releases/latest" class="btn btn-ghost-white btn-lg download-btn" data-platform="linux">
           Download for Linux
         </a>
       </div>
-      <div class="download-mobile">
-        <p>Mobile apps coming soon to App Store &amp; Google Play</p>
-      </div>
-      <div class="download-alt">
-        <h4>Install via package manager</h4>
-        <div class="code-block">
-          <code>brew install --cask chirp</code>
-        </div>
-        <div class="code-block">
-          <code>winget install chirp</code>
-        </div>
-        <div class="code-block">
-          <code>snap install chirp</code>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Blog Highlights -->
-  <section style="padding: 60px 0;">
-    <div class="container">
-      <h2>From the Blog</h2>
-      <p style="text-align: center; color: var(--gray-600); margin-bottom: 32px;">Tips on eye health, productivity, and digital wellness</p>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-        <a href="/blog/20-20-20-rule.html" style="text-decoration: none; color: inherit; padding: 24px; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: box-shadow 0.2s;">
-          <span style="color: var(--gray-400); font-size: 0.8rem;">Eye Health</span>
-          <h3 style="font-size: 1.1rem; margin: 8px 0;">The 20-20-20 Rule: What Science Says</h3>
-          <p style="color: var(--gray-600); font-size: 0.85rem;">The most widely recommended guideline for preventing digital eye strain.</p>
-        </a>
-        <a href="/blog/pomodoro-break-reminders.html" style="text-decoration: none; color: inherit; padding: 24px; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: box-shadow 0.2s;">
-          <span style="color: var(--gray-400); font-size: 0.8rem;">Productivity</span>
-          <h3 style="font-size: 1.1rem; margin: 8px 0;">Pomodoro + Break Reminders</h3>
-          <p style="color: var(--gray-600); font-size: 0.85rem;">Combine focus technique with eye care for the perfect productivity stack.</p>
-        </a>
-        <a href="/blog/best-break-reminder-apps-2026.html" style="text-decoration: none; color: inherit; padding: 24px; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: box-shadow 0.2s;">
-          <span style="color: var(--gray-400); font-size: 0.8rem;">Guides</span>
-          <h3 style="font-size: 1.1rem; margin: 8px 0;">Best Break Reminder Apps in 2026</h3>
-          <p style="color: var(--gray-600); font-size: 0.85rem;">A detailed roundup comparing Chirp, LookAway, Stretchly, and more.</p>
-        </a>
-      </div>
-      <p style="text-align: center; margin-top: 24px;"><a href="/blog/" class="btn btn-ghost btn-sm">View All Posts</a></p>
+      <p class="download-mobile reveal">iOS &amp; Android apps coming soon to App Store &amp; Google Play</p>
     </div>
   </section>
 
   <!-- FAQ -->
   <section class="faq">
     <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
+      <h2 class="reveal">Frequently Asked Questions</h2>
+      <div class="faq-list reveal">
         <details class="faq-item">
           <summary>What is the 20-20-20 rule?</summary>
           <p>Every 20 minutes, look at something 20 feet away for 20 seconds. This reduces eye strain from prolonged screen use. Chirp automates this with smart break reminders.</p>
         </details>
         <details class="faq-item">
           <summary>Is Chirp really free?</summary>
-          <p>Yes! Every feature — break reminders, Smart Pause, Pomodoro, custom reminders, stats, team dashboard, and all 5 platforms — is completely free. No premium tier, no upsells, no tracking.</p>
+          <p>Yes! Every feature &mdash; break reminders, Smart Pause, Pomodoro, custom reminders, stats, team dashboard, and all platforms &mdash; is completely free. No premium tier, no upsells, no tracking.</p>
         </details>
         <details class="faq-item">
           <summary>Does Chirp work on all platforms?</summary>
@@ -306,15 +292,15 @@
         </details>
         <details class="faq-item">
           <summary>How does Smart Pause work?</summary>
-          <p>Chirp detects when you're in a meeting (camera/mic active), watching video, in a fullscreen app, or using a focus app — and automatically pauses break reminders until you're done.</p>
+          <p>Chirp detects when you're in a meeting (camera/mic active), watching video, in a fullscreen app, or using a focus app &mdash; and automatically pauses break reminders until you're done.</p>
         </details>
         <details class="faq-item">
           <summary>Can I use Chirp with my team?</summary>
-          <p>Yes! Chirp includes a team dashboard with centralized settings, aggregate health scores, and admin controls — all free.</p>
+          <p>Yes! Chirp includes a team dashboard with centralized settings, aggregate health scores, and admin controls &mdash; all free.</p>
         </details>
         <details class="faq-item">
           <summary>Does Chirp collect any data?</summary>
-          <p>No. Chirp has zero analytics, zero telemetry, and zero tracking. Everything stays on your device. Optional sync goes to a server you control — we never see your data.</p>
+          <p>No. Chirp has zero analytics, zero telemetry, and zero tracking. Everything stays on your device. Optional sync goes to a server you control &mdash; we never see your data.</p>
         </details>
         <details class="faq-item">
           <summary>How is Chirp different from other break reminder apps?</summary>
@@ -330,28 +316,22 @@
       <div class="footer-grid">
         <div>
           <h4>Chirp</h4>
-          <p>Smart break reminders for healthy screen habits.</p>
+          <p class="footer-about">Smart break reminders for healthy screen habits. Free, open source, and built for your wellbeing.</p>
         </div>
         <div>
           <h4>Product</h4>
           <ul>
             <li><a href="#features">Features</a></li>
-            <li><a href="#pricing">Free &amp; Open</a></li>
+            <li><a href="blog/">Blog</a></li>
             <li><a href="#download">Download</a></li>
-            <li><a href="/blog/">Blog</a></li>
           </ul>
         </div>
         <div>
-          <h4>Compare</h4>
+          <h4>Project</h4>
           <ul>
-            <li><a href="/compare/">Compare break reminder apps</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="/privacy.html">Privacy Policy</a></li>
-            <li><a href="/terms.html">Terms of Service</a></li>
+            <li><a href="https://github.com/nareshnavinash/blink" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/nareshnavinash/blink/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a></li>
+            <li><a href="https://github.com/nareshnavinash/blink/issues" target="_blank" rel="noopener">Report a Bug</a></li>
           </ul>
         </div>
       </div>

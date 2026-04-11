@@ -21,18 +21,19 @@
 <body>
   <nav class="nav">
     <div class="nav-container">
-      <a href="/" class="nav-logo"><img src="../images/favicon-32x32.png" alt="Chirp" width="24" height="24" class="nav-logo-icon"> Chirp</a>
+      <a href="../" class="nav-logo"><img src="../images/favicon-32x32.png" alt="Chirp" width="24" height="24" class="nav-logo-icon"> Chirp</a>
       <div class="nav-links">
-        <a href="/#features">Features</a>
-        <a href="/#pricing">Free &amp; Open</a>
-        <a href="/blog/">Blog</a>
-        <a href="/#download" class="btn btn-primary btn-sm">Download Free</a>
+        <a href="../#features">Features</a>
+        <a href="https://github.com/nareshnavinash/blink" target="_blank" rel="noopener">GitHub</a>
+        <a href="./">Blog</a>
+        <a href="../#download" class="btn btn-primary btn-sm">Download Free</a>
       </div>
+      <button class="nav-toggle" aria-label="Menu">&#9776;</button>
     </div>
   </nav>
 
   <main class="container" style="padding: 60px 20px; max-width: 760px;">
-    <a href="/blog/" style="color: var(--gray-400); font-size: 0.85rem; text-decoration: none;">&larr; Back to Blog</a>
+    <a href="./" style="color: var(--gray-400); font-size: 0.85rem; text-decoration: none;">&larr; Back to Blog</a>
     <article style="margin-top: 24px;">
       <p style="color: var(--gray-400); font-size: 0.85rem;">April 20, 2026 &middot; Wellness</p>
       <h1>The Developer's Guide to Preventing RSI and Eye Strain</h1>
@@ -174,7 +175,7 @@
 
       <p><strong>Monitor arms.</strong> An adjustable monitor arm lets you fine-tune height and distance far more precisely than a fixed stand. They also free up desk space.</p>
 
-      <p><a href="/">Chirp</a> was built specifically for people like us. It combines 20-20-20 break reminders, blink nudges, posture check-ins, and a Pomodoro timer into one tool that runs on every platform you work on: macOS, Windows, Linux, and as a browser extension for Chrome and Firefox. Its smart pause feature means it will not interrupt you during stand-ups, pair programming sessions, or demos. And because it is free, open source, and tracks zero data, you can install it on your work machine without any procurement hassle.</p>
+      <p><a href="../">Chirp</a> was built specifically for people like us. It combines 20-20-20 break reminders, blink nudges, posture check-ins, and a Pomodoro timer into one tool that runs on every platform you work on: macOS, Windows, Linux, and as a browser extension for Chrome and Firefox. Its smart pause feature means it will not interrupt you during stand-ups, pair programming sessions, or demos. And because it is free, open source, and tracks zero data, you can install it on your work machine without any procurement hassle.</p>
 
       <h2>Building the Habit</h2>
 
@@ -192,7 +193,7 @@
 
       <p style="margin-top: 40px; padding: 20px; background: var(--gray-800, #1a1a2e); border-radius: 8px; text-align: center;">
         <strong>Protect your hands and eyes with automated break reminders.</strong><br>
-        <a href="/#download" style="margin-top: 8px; display: inline-block;">Download Chirp free</a> &mdash; built by developers, for developers. All platforms, zero tracking.
+        <a href="../#download" style="margin-top: 8px; display: inline-block;">Download Chirp free</a> &mdash; built by developers, for developers. All platforms, zero tracking.
       </p>
     </article>
   </main>
@@ -204,5 +205,6 @@
       </div>
     </div>
   </footer>
+  <script>document.querySelector(".nav-toggle")?.addEventListener("click",()=>{document.querySelector(".nav-links")?.classList.toggle("active")});</script>
 </body>
 </html>

@@ -27,17 +27,16 @@ document.querySelector('.nav-toggle')?.addEventListener('click', () => {
     platform = 'Android';
   }
 
-  el.textContent = `Detected: ${platform}`;
+  el.textContent = `Detected: ${platform} — Free, open source, available everywhere.`;
 
-  // Highlight the matching download button
   if (highlight) {
     document.querySelectorAll('.download-btn').forEach(btn => {
       if (btn.dataset.platform === highlight) {
-        btn.classList.remove('btn-ghost');
-        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-ghost-white');
+        btn.classList.add('btn-white');
       } else {
-        btn.classList.remove('btn-primary');
-        btn.classList.add('btn-ghost');
+        btn.classList.remove('btn-white');
+        btn.classList.add('btn-ghost-white');
       }
     });
   }
@@ -50,8 +49,49 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (target) {
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Close mobile menu
       document.querySelector('.nav-links')?.classList.remove('active');
     }
   });
 });
+
+// Nav scroll state — switch from dark to light after hero
+(function navScrollState() {
+  const nav = document.querySelector('.nav');
+  const hero = document.querySelector('.hero');
+  if (!nav || !hero) return;
+
+  function onScroll() {
+    const heroBottom = hero.offsetHeight;
+    if (window.scrollY > heroBottom - 80) {
+      nav.classList.add('nav-scrolled');
+    } else {
+      nav.classList.remove('nav-scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// Scroll reveal via IntersectionObserver
+(function scrollReveal() {
+  if (typeof IntersectionObserver === 'undefined') {
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+      el.classList.add('visible');
+    });
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    observer.observe(el);
+  });
+})();

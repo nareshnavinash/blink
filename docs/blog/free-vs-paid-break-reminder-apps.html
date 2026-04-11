@@ -21,18 +21,19 @@
 <body>
   <nav class="nav">
     <div class="nav-container">
-      <a href="/" class="nav-logo"><img src="../images/favicon-32x32.png" alt="Chirp" width="24" height="24" class="nav-logo-icon"> Chirp</a>
+      <a href="../" class="nav-logo"><img src="../images/favicon-32x32.png" alt="Chirp" width="24" height="24" class="nav-logo-icon"> Chirp</a>
       <div class="nav-links">
-        <a href="/#features">Features</a>
-        <a href="/#pricing">Free &amp; Open</a>
-        <a href="/blog/">Blog</a>
-        <a href="/#download" class="btn btn-primary btn-sm">Download Free</a>
+        <a href="../#features">Features</a>
+        <a href="https://github.com/nareshnavinash/blink" target="_blank" rel="noopener">GitHub</a>
+        <a href="./">Blog</a>
+        <a href="../#download" class="btn btn-primary btn-sm">Download Free</a>
       </div>
+      <button class="nav-toggle" aria-label="Menu">&#9776;</button>
     </div>
   </nav>
 
   <main class="container" style="padding: 60px 20px; max-width: 760px;">
-    <a href="/blog/" style="color: var(--gray-400); font-size: 0.85rem; text-decoration: none;">&larr; Back to Blog</a>
+    <a href="./" style="color: var(--gray-400); font-size: 0.85rem; text-decoration: none;">&larr; Back to Blog</a>
     <article style="margin-top: 24px;">
       <p style="color: var(--gray-400); font-size: 0.85rem;">April 16, 2026 &middot; Guides</p>
       <h1>Free vs Paid Break Reminder Apps: Is It Worth Paying $29?</h1>
@@ -238,7 +239,7 @@
 
       <p>For most people, a free break reminder app will do everything they need. The feature gap that used to justify a $19-29 price tag has largely closed.</p>
 
-      <p>If you want the broadest platform coverage, smart meeting detection, and additional wellness features like Pomodoro timing and health scoring, <a href="/">Chirp</a> covers all of that at no cost across every major platform.</p>
+      <p>If you want the broadest platform coverage, smart meeting detection, and additional wellness features like Pomodoro timing and health scoring, <a href="../">Chirp</a> covers all of that at no cost across every major platform.</p>
 
       <p>If you want a simpler, desktop-only break reminder and are already familiar with Stretchly, it remains a solid choice.</p>
 
@@ -248,7 +249,7 @@
 
       <p style="margin-top: 40px; padding: 20px; background: var(--gray-800, #1a1a2e); border-radius: 8px; text-align: center;">
         <strong>Full-featured break reminders, completely free.</strong><br>
-        <a href="/#download" style="margin-top: 8px; display: inline-block;">Download Chirp</a> &mdash; macOS, Windows, Linux, iOS, Android, Chrome, Firefox.
+        <a href="../#download" style="margin-top: 8px; display: inline-block;">Download Chirp</a> &mdash; macOS, Windows, Linux, iOS, Android, Chrome, Firefox.
       </p>
     </article>
   </main>
@@ -260,5 +261,6 @@
       </div>
     </div>
   </footer>
+  <script>document.querySelector(".nav-toggle")?.addEventListener("click",()=>{document.querySelector(".nav-links")?.classList.toggle("active")});</script>
 </body>
 </html>

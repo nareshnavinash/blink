@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <!-- Chirp App Icon: Layered Minimal 3D "C" -->
 
-  <rect width="1024" height="1024" rx="224" ry="224" fill="#F8F7F4"/>
+  <rect width="1024" height="1024" rx="224" ry="224" fill="#FAF7F5"/>
 
   <!-- Layer 3 (back, lightest, most offset) -->
   <path d="M 730 395 A 290 290 0 1 0 730 629"
-        stroke="#E0D4FF" stroke-width="120" stroke-linecap="round" fill="none"
+        stroke="#E8DFF0" stroke-width="120" stroke-linecap="round" fill="none"
         transform="translate(16, 16)"/>
 
   <!-- Layer 2 (middle) -->
   <path d="M 730 395 A 290 290 0 1 0 730 629"
-        stroke="#B794F6" stroke-width="120" stroke-linecap="round" fill="none"
+        stroke="#C4ACE0" stroke-width="120" stroke-linecap="round" fill="none"
         transform="translate(8, 8)"/>
 
   <!-- Layer 1 (front, darkest) -->
   <path d="M 730 395 A 290 290 0 1 0 730 629"
-        stroke="#7C3AED" stroke-width="120" stroke-linecap="round" fill="none"/>
+        stroke="#9B7EC8" stroke-width="120" stroke-linecap="round" fill="none"/>
 </svg>

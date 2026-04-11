@@ -10,6 +10,9 @@ class MainFlutterWindow: NSWindow {
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
+    let overlayRegistrar = flutterViewController.registrar(forPlugin: "OverlayWindowManager")
+    OverlayWindowManager.shared.register(with: overlayRegistrar)
+
     super.awakeFromNib()
   }
 }

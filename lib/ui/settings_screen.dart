@@ -18,6 +18,7 @@ class SettingsScreen extends ConsumerWidget {
           title: const Text('Settings'),
           bottom: const TabBar(
             isScrollable: true,
+            tabAlignment: TabAlignment.center,
             tabs: [
               Tab(icon: Icon(Icons.tune, size: 18), text: 'General'),
               Tab(icon: Icon(Icons.free_breakfast, size: 18), text: 'Breaks'),
@@ -94,7 +95,13 @@ class _GeneralTab extends ConsumerWidget {
         ListTile(
           title: const Text(AppConstants.appName),
           subtitle: Text('Version ${AppConstants.appVersion}'),
-          leading: const Icon(Icons.remove_red_eye),
+          leading: Image.asset(
+            Theme.of(context).brightness == Brightness.dark
+                ? 'assets/branding/chirp_splash_240_dark.png'
+                : 'assets/branding/chirp_splash_240.png',
+            width: 24,
+            height: 24,
+          ),
         ),
       ],
     );

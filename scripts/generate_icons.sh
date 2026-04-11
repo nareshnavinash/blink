@@ -96,10 +96,10 @@ rsvg-convert -w 512 -h 512 "$SVG_ICON" > "${PROJECT_DIR}/linux/chirp.png"
 # ── System Tray Icons ──────────────────────────────────────────
 echo "  System tray icons..."
 TRAY_DIR="${PROJECT_DIR}/assets/icons"
-rsvg-convert -w 32 -h 32 "$SVG_TRAY_LIGHT" > "${TRAY_DIR}/tray_icon.png"
-rsvg-convert -w 64 -h 64 "$SVG_TRAY_LIGHT" > "${TRAY_DIR}/tray_icon@2x.png"
-rsvg-convert -w 32 -h 32 "$SVG_TRAY_DARK"  > "${TRAY_DIR}/tray_icon_dark.png"
-rsvg-convert -w 64 -h 64 "$SVG_TRAY_DARK"  > "${TRAY_DIR}/tray_icon_dark@2x.png"
+rsvg-convert -w 22 -h 22 "$SVG_TRAY_LIGHT" > "${TRAY_DIR}/tray_icon.png"
+rsvg-convert -w 44 -h 44 "$SVG_TRAY_LIGHT" > "${TRAY_DIR}/tray_icon@2x.png"
+rsvg-convert -w 22 -h 22 "$SVG_TRAY_DARK"  > "${TRAY_DIR}/tray_icon_dark.png"
+rsvg-convert -w 44 -h 44 "$SVG_TRAY_DARK"  > "${TRAY_DIR}/tray_icon_dark@2x.png"
 
 # ── Browser Extension Icons ────────────────────────────────────
 echo "  Browser extension icons..."

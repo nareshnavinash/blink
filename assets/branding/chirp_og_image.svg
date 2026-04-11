@@ -2,27 +2,27 @@
   <!-- Open Graph social sharing image (1200x630) -->
 
   <!-- Background -->
-  <rect width="1200" height="630" fill="#1E1035"/>
+  <rect width="1200" height="630" fill="#2A1F3D"/>
 
   <!-- Layered C motif (left-center area) -->
   <!-- Layer 3 (back) -->
   <path d="M 420 267 A 120 120 0 1 0 420 363"
-        stroke="#4C1D95" stroke-width="50" stroke-linecap="round" fill="none"
+        stroke="#3D2E52" stroke-width="50" stroke-linecap="round" fill="none"
         transform="translate(8, 8)"/>
   <!-- Layer 2 (middle) -->
   <path d="M 420 267 A 120 120 0 1 0 420 363"
-        stroke="#7C3AED" stroke-width="50" stroke-linecap="round" fill="none"
+        stroke="#9B7EC8" stroke-width="50" stroke-linecap="round" fill="none"
         transform="translate(4, 4)"/>
   <!-- Layer 1 (front) -->
   <path d="M 420 267 A 120 120 0 1 0 420 363"
-        stroke="#B794F6" stroke-width="50" stroke-linecap="round" fill="none"/>
+        stroke="#C4ACE0" stroke-width="50" stroke-linecap="round" fill="none"/>
 
   <!-- App name text -->
-  <text x="580" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="96" font-weight="700" fill="#F8F7F4">Chirp</text>
+  <text x="580" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="96" font-weight="700" fill="#FAF7F5">Chirp</text>
 
   <!-- Tagline -->
-  <text x="580" y="355" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="#B794F6">Smart break reminders</text>
+  <text x="580" y="355" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="#C4ACE0">Smart break reminders</text>
 
   <!-- Subtle URL -->
-  <text x="580" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="300" fill="#6D28D9">chirpapp.dev</text>
+  <text x="580" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="300" fill="#7B5EA8">chirpapp.dev</text>
 </svg>

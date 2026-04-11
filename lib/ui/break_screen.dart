@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chirp/core/providers.dart';
@@ -14,19 +15,26 @@ class BreakScreen extends ConsumerWidget {
     final timerAsync = ref.watch(timerStatusProvider);
     final colors = ChirpColors.of(context);
 
+    // On macOS, use semi-transparent dark overlay for fullscreen mode
+    // On other desktop platforms, keep the gradient in the normal window
+    final background = Platform.isMacOS
+        ? BoxDecoration(color: Colors.black.withValues(alpha: 0.85))
+        : BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                colors.breakGradientStart,
+                colors.breakGradientEnd,
+              ],
+            ),
+          );
+
     return BreakKeyboardShortcuts(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              colors.breakGradientStart,
-              colors.breakGradientEnd,
-            ],
-          ),
-        ),
+        decoration: background,
         child: Center(
           child: timerAsync.when(
             data: (status) => _BreakContent(status: status, ref: ref),

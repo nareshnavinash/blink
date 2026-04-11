@@ -3,15 +3,15 @@
 
   <!-- Layer 3 (back, lightest, most offset) -->
   <path d="M 310 175 A 120 120 0 1 0 310 271"
-        stroke="#E0D4FF" stroke-width="50" stroke-linecap="round" fill="none"
+        stroke="#E8DFF0" stroke-width="50" stroke-linecap="round" fill="none"
         transform="translate(6, 6)"/>
 
   <!-- Layer 2 (middle) -->
   <path d="M 310 175 A 120 120 0 1 0 310 271"
-        stroke="#B794F6" stroke-width="50" stroke-linecap="round" fill="none"
+        stroke="#C4ACE0" stroke-width="50" stroke-linecap="round" fill="none"
         transform="translate(3, 3)"/>
 
   <!-- Layer 1 (front, darkest) -->
   <path d="M 310 175 A 120 120 0 1 0 310 271"
-        stroke="#7C3AED" stroke-width="50" stroke-linecap="round" fill="none"/>
+        stroke="#9B7EC8" stroke-width="50" stroke-linecap="round" fill="none"/>
 </svg>

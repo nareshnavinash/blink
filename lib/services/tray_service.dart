@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io' show exit;
+import 'dart:ui' show Brightness;
 import 'package:flutter/scheduler.dart';
 import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
@@ -13,7 +15,7 @@ class TrayService {
 
   Future<void> init() async {
     await _systemTray.initSystemTray(
-      title: 'Chirp',
+      title: '',
       iconPath: _getTrayIconPath(),
       toolTip: 'Chirp - Starting...',
     );
@@ -21,11 +23,14 @@ class TrayService {
     await _updateMenu();
 
     _systemTray.registerSystemTrayEventHandler((eventName) {
-      if (eventName == kSystemTrayEventClick ||
-          eventName == kSystemTrayEventRightClick) {
+      if (eventName == kSystemTrayEventClick) {
+        _toggleMainWindow();
+      } else if (eventName == kSystemTrayEventRightClick) {
         _systemTray.popUpContextMenu();
       }
     });
+
+    _listenForAppearanceChanges();
   }
 
   void listenToTimer(TimerService timerService) {
@@ -33,6 +38,23 @@ class TrayService {
     _timerSubscription = timerService.statusStream.listen((status) {
       _updateTooltipFromStatus(status);
     });
+  }
+
+  Future<void> _toggleMainWindow() async {
+    final isVisible = await windowManager.isVisible();
+    if (isVisible) {
+      await windowManager.hide();
+    } else {
+      await windowManager.show();
+      await windowManager.focus();
+    }
+  }
+
+  void _listenForAppearanceChanges() {
+    SchedulerBinding.instance.platformDispatcher.onPlatformBrightnessChanged =
+        () {
+      _systemTray.setSystemTrayInfo(iconPath: _getTrayIconPath());
+    };
   }
 
   String _getTrayIconPath() {
@@ -93,7 +115,9 @@ class TrayService {
         label: 'Quit Chirp',
         onClicked: (menuItem) async {
           await _systemTray.destroy();
+          await windowManager.setPreventClose(false);
           await windowManager.destroy();
+          exit(0);
         },
       ),
     ];

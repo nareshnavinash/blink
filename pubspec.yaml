@@ -16,6 +16,9 @@ dependencies:
   # Window management
   window_manager: ^0.5.1
 
+  # Screen detection for overlay
+  screen_retriever: ^0.2.0
+
   # Auto-start on boot
   launch_at_startup: ^0.5.1
 
@@ -46,16 +49,16 @@ dev_dependencies:
   flutter_native_splash: ^2.4.0
 
 flutter_native_splash:
-  color: "#F8F7F4"
+  color: "#FAF7F5"
   image: assets/branding/chirp_splash_480.png
-  color_dark: "#1E1035"
+  color_dark: "#2A1F3D"
   image_dark: assets/branding/chirp_splash_480_dark.png
   android_12:
-    color: "#F8F7F4"
-    icon_background_color: "#F8F7F4"
+    color: "#FAF7F5"
+    icon_background_color: "#FAF7F5"
     image: assets/branding/chirp_splash_240.png
-    color_dark: "#1E1035"
-    icon_background_color_dark: "#1E1035"
+    color_dark: "#2A1F3D"
+    icon_background_color_dark: "#2A1F3D"
     image_dark: assets/branding/chirp_splash_240_dark.png
   web: false
 
@@ -64,3 +67,4 @@ flutter:
 
   assets:
     - assets/icons/
+    - assets/branding/

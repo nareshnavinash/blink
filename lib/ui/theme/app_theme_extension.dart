@@ -9,6 +9,10 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
   final Color brandLight;
   final Color brandSubtle;
 
+  final Color rose;
+  final Color roseLight;
+  final Color roseSubtle;
+
   final Color success;
   final Color successLight;
   final Color successMedium;
@@ -39,6 +43,9 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
     required this.brand,
     required this.brandLight,
     required this.brandSubtle,
+    required this.rose,
+    required this.roseLight,
+    required this.roseSubtle,
     required this.success,
     required this.successLight,
     required this.successMedium,
@@ -66,6 +73,9 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
         brand: AppColors.brand,
         brandLight: AppColors.brandLight,
         brandSubtle: AppColors.brandSubtle,
+        rose: AppColors.rose,
+        roseLight: AppColors.roseLight,
+        roseSubtle: AppColors.roseSubtle,
         success: AppColors.success,
         successLight: AppColors.successLight,
         successMedium: AppColors.successMedium,
@@ -93,6 +103,9 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
         brand: AppColors.darkBrand,
         brandLight: AppColors.darkBrand,
         brandSubtle: AppColors.darkBrandSubtle,
+        rose: AppColors.darkRose,
+        roseLight: AppColors.darkRoseLight,
+        roseSubtle: AppColors.darkRoseSubtle,
         success: AppColors.darkSuccess,
         successLight: AppColors.darkSuccessLight,
         successMedium: AppColors.darkSuccessMedium,
@@ -127,6 +140,9 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
     Color? brand,
     Color? brandLight,
     Color? brandSubtle,
+    Color? rose,
+    Color? roseLight,
+    Color? roseSubtle,
     Color? success,
     Color? successLight,
     Color? successMedium,
@@ -152,6 +168,9 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
       brand: brand ?? this.brand,
       brandLight: brandLight ?? this.brandLight,
       brandSubtle: brandSubtle ?? this.brandSubtle,
+      rose: rose ?? this.rose,
+      roseLight: roseLight ?? this.roseLight,
+      roseSubtle: roseSubtle ?? this.roseSubtle,
       success: success ?? this.success,
       successLight: successLight ?? this.successLight,
       successMedium: successMedium ?? this.successMedium,
@@ -182,6 +201,9 @@ class ChirpColors extends ThemeExtension<ChirpColors> {
       brand: Color.lerp(brand, other.brand, t)!,
       brandLight: Color.lerp(brandLight, other.brandLight, t)!,
       brandSubtle: Color.lerp(brandSubtle, other.brandSubtle, t)!,
+      rose: Color.lerp(rose, other.rose, t)!,
+      roseLight: Color.lerp(roseLight, other.roseLight, t)!,
+      roseSubtle: Color.lerp(roseSubtle, other.roseSubtle, t)!,
       success: Color.lerp(success, other.success, t)!,
       successLight: Color.lerp(successLight, other.successLight, t)!,
       successMedium: Color.lerp(successMedium, other.successMedium, t)!,

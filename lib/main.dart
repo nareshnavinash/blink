@@ -17,6 +17,7 @@ import 'package:chirp/services/pairing_service.dart';
 import 'package:chirp/services/sync_service.dart';
 import 'package:chirp/services/team_service.dart';
 import 'package:chirp/services/tray_service.dart';
+import 'package:chirp/services/overlay_service.dart';
 import 'package:chirp/ui/break_screen.dart';
 import 'package:chirp/ui/home_screen.dart';
 import 'package:chirp/ui/mobile/mobile_home_screen.dart';
@@ -34,6 +35,7 @@ late final ScheduleService scheduleService;
 // Desktop-only globals
 TrayService? trayService;
 NotificationService? desktopNotificationService;
+OverlayService? overlayService;
 
 // Mobile-only globals
 MobileNotificationService? mobileNotificationService;
@@ -75,7 +77,7 @@ Future<void> main() async {
       minimumSize: const Size(400, 500),
       center: true,
       title: 'Chirp',
-      skipTaskbar: false,
+      skipTaskbar: true,
       titleBarStyle: TitleBarStyle.normal,
     );
 
@@ -89,6 +91,10 @@ Future<void> main() async {
     });
 
     await windowManager.setPreventClose(true);
+
+    if (Platform.isMacOS) {
+      overlayService = OverlayService();
+    }
 
     desktopNotificationService = NotificationService();
     await desktopNotificationService!.init();
@@ -287,32 +293,57 @@ class _ChirpAppState extends ConsumerState<ChirpApp> with WindowListener {
 
     if (status.state == TimerState.onBreak && !_isBreakScreenShowing) {
       _isBreakScreenShowing = true;
-      windowManager.show();
-      windowManager.focus();
-      navigator.push(
-        PageRouteBuilder(
-          opaque: true,
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const BreakScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            final curved = CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-            );
-            return FadeTransition(
-              opacity: curved,
-              child: ScaleTransition(
-                scale: Tween(begin: 0.95, end: 1.0).animate(curved),
-                child: child,
-              ),
-            );
-          },
-          transitionDuration: const Duration(milliseconds: 400),
-        ),
-      );
+
+      if (Platform.isMacOS && overlayService != null) {
+        // macOS: full-screen overlay on all monitors
+        overlayService!.showBreakOverlay().then((_) {
+          navigator.push(
+            PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const BreakScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              transitionDuration: const Duration(milliseconds: 400),
+            ),
+          );
+        });
+      } else {
+        // Windows/Linux: show in normal window
+        windowManager.show();
+        windowManager.focus();
+        navigator.push(
+          PageRouteBuilder(
+            opaque: true,
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const BreakScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              final curved = CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+              );
+              return FadeTransition(
+                opacity: curved,
+                child: ScaleTransition(
+                  scale: Tween(begin: 0.95, end: 1.0).animate(curved),
+                  child: child,
+                ),
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 400),
+          ),
+        );
+      }
     } else if (status.state != TimerState.onBreak && _isBreakScreenShowing) {
       _isBreakScreenShowing = false;
       navigator.pop();
+
+      if (Platform.isMacOS && overlayService != null) {
+        overlayService!.hideBreakOverlay();
+      }
     }
   }
 

@@ -77,7 +77,13 @@ class _MobileTimerTab extends ConsumerWidget {
             // Header
             Row(
               children: [
-                Icon(Icons.remove_red_eye, size: 28, color: ChirpColors.of(context).brand),
+                Image.asset(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/branding/chirp_splash_240_dark.png'
+                      : 'assets/branding/chirp_splash_240.png',
+                  width: 28,
+                  height: 28,
+                ),
                 const SizedBox(width: 10),
                 Text(
                   AppConstants.appName,

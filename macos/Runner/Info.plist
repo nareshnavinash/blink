@@ -32,5 +32,7 @@
 	<string>Chirp checks if your camera is in use to detect meetings and automatically pause break reminders.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Chirp checks if your microphone is in use to detect meetings and automatically pause break reminders.</string>
+	<key>LSUIElement</key>
+	<true/>
 </dict>
 </plist>

@@ -5,7 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chirp - Smart Break Reminders for Healthy Screen Habits</title>
   <meta name="description" content="Free cross-platform digital wellness app with smart break reminders, blink &amp; posture nudges, Pomodoro timer, and health score. Mac, Windows, Linux, iOS, Android.">
-  <meta name="keywords" content="break reminder, eye strain, 20-20-20 rule, digital wellness, screen time, pomodoro, posture reminder">
+  <meta name="keywords" content="break reminder, eye strain, 20-20-20 rule, digital wellness, screen time, pomodoro, posture reminder, free break reminder app, eye care app">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chirp - Smart Break Reminders for Healthy Screen Habits">
+  <meta name="twitter:description" content="Free cross-platform digital wellness app. Break reminders, Pomodoro, health score. Zero tracking.">
+  <meta name="twitter:image" content="https://chirpapp.dev/images/og-image.png">
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Chirp",
+    "description": "Free cross-platform digital wellness app with smart break reminders, blink & posture nudges, Pomodoro timer, and health score.",
+    "url": "https://chirpapp.dev",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "macOS, Windows, Linux, iOS, Android",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "softwareVersion": "0.1.0",
+    "license": "https://opensource.org/licenses/MIT",
+    "screenshot": "https://chirpapp.dev/images/screenshots/app_home.png",
+    "featureList": "Break reminders, Blink reminders, Posture reminders, Pomodoro timer, Health score, Smart Pause, Team dashboard, Browser extension"
+  }
+  </script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
@@ -42,15 +68,40 @@
     <div class="container">
       <h1>Your eyes deserve a break.</h1>
       <p class="hero-subtitle">
-        Smart break reminders, blink &amp; posture nudges, and a built-in Pomodoro timer.
-        100% free. No accounts. No tracking. No upsells.
+        The only free, cross-platform break reminder with smart meeting detection, Pomodoro timer, and zero tracking.
+        Works on Mac, Windows, Linux, iOS, Android &amp; your browser.
       </p>
       <div class="hero-cta">
         <a href="#download" class="btn btn-primary btn-lg">Download for Free</a>
         <a href="#features" class="btn btn-ghost btn-lg">See Features</a>
       </div>
+      <div class="hero-screenshots" style="display: flex; justify-content: center; gap: 24px; margin: 40px 0 24px; flex-wrap: wrap;">
+        <img src="images/screenshots/app_home.png" alt="Chirp home screen with break timer" width="240" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+        <img src="images/screenshots/app_break_overlay.png" alt="Chirp break overlay covering all monitors" width="380" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+      </div>
       <div class="hero-platforms">
         Available on macOS, Windows, Linux, iOS &amp; Android
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section style="padding: 32px 0; text-align: center; border-bottom: 1px solid var(--gray-200);">
+    <div class="container" style="display: flex; justify-content: center; align-items: center; gap: 32px; flex-wrap: wrap;">
+      <div style="color: var(--gray-600); font-size: 0.9rem;">
+        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">5+</strong> Platforms supported
+      </div>
+      <div style="width: 1px; height: 40px; background: var(--gray-200);"></div>
+      <div style="color: var(--gray-600); font-size: 0.9rem;">
+        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">$0</strong> Forever, all features
+      </div>
+      <div style="width: 1px; height: 40px; background: var(--gray-200);"></div>
+      <div style="color: var(--gray-600); font-size: 0.9rem;">
+        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">0</strong> Data collected
+      </div>
+      <div style="width: 1px; height: 40px; background: var(--gray-200);"></div>
+      <div style="color: var(--gray-600); font-size: 0.9rem;">
+        <strong style="font-size: 1.5rem; color: var(--gray-800); display: block;">MIT</strong> Open source
       </div>
     </div>
   </section>
@@ -207,6 +258,32 @@
           <code>snap install chirp</code>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Blog Highlights -->
+  <section style="padding: 60px 0;">
+    <div class="container">
+      <h2>From the Blog</h2>
+      <p style="text-align: center; color: var(--gray-600); margin-bottom: 32px;">Tips on eye health, productivity, and digital wellness</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <a href="/blog/20-20-20-rule.html" style="text-decoration: none; color: inherit; padding: 24px; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: box-shadow 0.2s;">
+          <span style="color: var(--gray-400); font-size: 0.8rem;">Eye Health</span>
+          <h3 style="font-size: 1.1rem; margin: 8px 0;">The 20-20-20 Rule: What Science Says</h3>
+          <p style="color: var(--gray-600); font-size: 0.85rem;">The most widely recommended guideline for preventing digital eye strain.</p>
+        </a>
+        <a href="/blog/pomodoro-break-reminders.html" style="text-decoration: none; color: inherit; padding: 24px; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: box-shadow 0.2s;">
+          <span style="color: var(--gray-400); font-size: 0.8rem;">Productivity</span>
+          <h3 style="font-size: 1.1rem; margin: 8px 0;">Pomodoro + Break Reminders</h3>
+          <p style="color: var(--gray-600); font-size: 0.85rem;">Combine focus technique with eye care for the perfect productivity stack.</p>
+        </a>
+        <a href="/blog/best-break-reminder-apps-2026.html" style="text-decoration: none; color: inherit; padding: 24px; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: box-shadow 0.2s;">
+          <span style="color: var(--gray-400); font-size: 0.8rem;">Guides</span>
+          <h3 style="font-size: 1.1rem; margin: 8px 0;">Best Break Reminder Apps in 2026</h3>
+          <p style="color: var(--gray-600); font-size: 0.85rem;">A detailed roundup comparing Chirp, LookAway, Stretchly, and more.</p>
+        </a>
+      </div>
+      <p style="text-align: center; margin-top: 24px;"><a href="/blog/" class="btn btn-ghost btn-sm">View All Posts</a></p>
     </div>
   </section>
 

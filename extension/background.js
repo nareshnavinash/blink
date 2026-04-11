@@ -125,7 +125,7 @@ function updateBadge() {
 
   const color = state.status === 'onBreak' ? '#22c55e'
     : state.status === 'paused' ? '#f59e0b'
-    : '#3b82f6';
+    : '#9B7EC8';
 
   chrome.action.setBadgeText({ text });
   chrome.action.setBadgeBackgroundColor({ color });

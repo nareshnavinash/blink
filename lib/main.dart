@@ -344,21 +344,23 @@ class _ChirpAppState extends ConsumerState<ChirpApp> with WindowListener {
       _isBreakScreenShowing = true;
 
       if (Platform.isMacOS && overlayService != null) {
-        // macOS: full-screen overlay on all monitors
-        overlayService!.showBreakOverlay().then((_) {
-          navigator.push(
-            PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  const BreakScreen(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
-              transitionDuration: const Duration(milliseconds: 400),
-            ),
-          );
-        });
+        // macOS: push break screen first (while window is still hidden),
+        // then show the fullscreen overlay — prevents HomeScreen from
+        // flashing behind the semi-transparent break overlay.
+        navigator.push(
+          PageRouteBuilder(
+            opaque: true,
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const BreakScreen(),
+            // No transition on macOS — the window goes from hidden to
+            // visible via showBreakOverlay(), so a fade is redundant.
+            // Duration.zero also ensures opaque:true takes effect
+            // immediately, preventing the HomeScreen from painting
+            // during a transition period.
+            transitionDuration: Duration.zero,
+          ),
+        );
+        overlayService!.showBreakOverlay();
       } else {
         // Windows/Linux: show in normal window
         windowManager.show();
